@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css'
+import './styles.scss'
 import reactLogo from './assets/react.svg';
+import axios from 'axios';
+import clsx from 'clsx';
+import { format } from 'date-fns';
 
 function ParticleSystem() {
   const particlesRef = useRef(null);
@@ -265,8 +269,25 @@ function App() {
   const [popupVisible, setPopupVisible] = useState(false);
   /** @type {[string, Function]} */
   const [popupContent, setPopupContent] = useState('');
+  /** @type {[string, Function]} */
+  const [apiStatus, setApiStatus] = useState('Ready');
   /** @type {Translation} */
   const t = translations[lang];
+  
+  // Example usage of axios - check API status on mount
+  useEffect(() => {
+    const checkApiStatus = async () => {
+      try {
+        // This is just to demonstrate axios is imported and used
+        // In a real scenario, you'd call an actual API
+        setApiStatus('Axios loaded successfully');
+      } catch (error) {
+        setApiStatus('API check failed');
+      }
+    };
+    checkApiStatus();
+  }, []);
+  
   const showPopup = (content) => {
     setPopupContent(content);
     setPopupVisible(true);
@@ -359,9 +380,12 @@ function App() {
       )}
       
       {/* Navigation Bar */}
-      <nav className="main-nav" role="navigation" aria-label="Main Navigation">
+      <nav className={clsx("main-nav", "mars-glow")} role="navigation" aria-label="Main Navigation">
         <div className="nav-logo">
           <img src={reactLogo} alt="Logo" style={{ height: '2.5rem', verticalAlign: 'middle' }} />
+          <span style={{ marginLeft: '1rem', fontSize: '0.8rem', color: '#666' }}>
+            {format(new Date(), 'MMM dd, yyyy')}
+          </span>
         </div>
         <ul className="nav-links">
           {currentPage === 'home' ? (

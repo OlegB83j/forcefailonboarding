@@ -1,0 +1,41 @@
+// SCSS variables for Martian theme
+$mars-red: #ff0000;
+$mars-green: #00ff00;
+$dark-bg: #1a1a1a;
+$border-radius: 8px;
+
+// Mixin for glowing effect
+@mixin glow($color) {
+  box-shadow: 0 0 10px $color, 0 0 20px $color;
+}
+
+.mars-glow {
+  @include glow($mars-red);
+  
+  &:hover {
+    @include glow($mars-green);
+    transition: box-shadow 0.3s ease;
+  }
+}
+
+// Nested styles for feature cards
+.feature-card {
+  background-color: $dark-bg;
+  border-radius: $border-radius;
+  padding: 2rem;
+  
+  .feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  h3 {
+    color: $mars-red;
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    color: #ccc;
+  }
+}
+
