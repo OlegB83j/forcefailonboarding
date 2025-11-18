@@ -8,7 +8,9 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "type": "tsc --noEmit"
+    "type": "tsc --noEmit",
+    "postinstall": "npx --yes patch-package || true",
+    "prepare": "npx --yes simple-git-hooks || echo 'Skipping git hooks in CI'"
   },
   "dependencies": {
     "react": "^19.1.0",
@@ -26,9 +28,11 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
+    "patch-package": "^8.0.0",
     "sass": "^1.69.5",
+    "simple-git-hooks": "^2.9.0",
     "typescript": "^5.6.3",
     "vite": "^7.0.4",
-    "vite-plugin-inspect": "^0.8.1"
+    "vite-plugin-inspect": "^11.3.3"
   }
 }

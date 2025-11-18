@@ -4,7 +4,12 @@
 
 set -e
 
+# Set non-interactive mode for npm (required for postinstall scripts)
+export CI=true
+export npm_config_yes=true
+
 echo "🚀 Starting warmup script..."
+echo "✓ Non-interactive mode enabled (CI=true, npm_config_yes=true)"
 echo ""
 
 # Check if Node.js is available
@@ -34,6 +39,18 @@ fi
 
 # Check if node_modules exists
 echo "✓ Checking dependencies..."
+
+# Check if package-lock.json is in sync
+if [ -f "package-lock.json" ] && [ -f "package.json" ]; then
+    echo "  Checking if package-lock.json is in sync..."
+    # Try npm ci in dry-run mode to check if lock file is in sync
+    if ! npm ci --dry-run &>/dev/null; then
+        echo "  ⚠️  package-lock.json is out of sync with package.json"
+        echo "  Removing package-lock.json and regenerating..."
+        rm -f package-lock.json
+    fi
+fi
+
 if [ ! -d "node_modules" ]; then
     echo "  ⚠️  node_modules not found. Installing dependencies..."
     npm install

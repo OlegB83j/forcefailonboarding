@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import './App.css'
 import './styles.scss'
 import reactLogo from './assets/react.svg';
-import axios from 'axios';
 import clsx from 'clsx';
 import { format } from 'date-fns';
 
@@ -269,24 +268,8 @@ function App() {
   const [popupVisible, setPopupVisible] = useState(false);
   /** @type {[string, Function]} */
   const [popupContent, setPopupContent] = useState('');
-  /** @type {[string, Function]} */
-  const [apiStatus, setApiStatus] = useState('Ready');
   /** @type {Translation} */
   const t = translations[lang];
-  
-  // Example usage of axios - check API status on mount
-  useEffect(() => {
-    const checkApiStatus = async () => {
-      try {
-        // This is just to demonstrate axios is imported and used
-        // In a real scenario, you'd call an actual API
-        setApiStatus('Axios loaded successfully');
-      } catch (error) {
-        setApiStatus('API check failed');
-      }
-    };
-    checkApiStatus();
-  }, []);
   
   const showPopup = (content) => {
     setPopupContent(content);
@@ -407,7 +390,7 @@ function App() {
       <a href="#main-content" className="skip-link">Skip to main content</a>
       <div className="mars-landing" id="main-content" role="main">
         {currentPage === 'home' ? (
-          <HomePage t={t} setCurrentPage={setCurrentPage} showPopup={showPopup} />
+          <HomePage t={t} setCurrentPage={setCurrentPage} showPopup={showPopup} setLang={setLang} />
         ) : currentPage === 'html-elements' ? (
           <HTMLElementsPage t={t} />
         ) : (
@@ -418,7 +401,7 @@ function App() {
   )
 }
 
-function HomePage({ t, setCurrentPage, showPopup }) {
+function HomePage({ t, setCurrentPage, showPopup, setLang }) {
   const funnyMessages = {
     join: [
       "🚀 EXCELLENT CHOICE, EARTHLING! Your application to join our glorious invasion has been submitted. Side effects may include: temporary disintegration, chronic case of being green, and an irresistible urge to say 'ACK ACK ACK!' Report to the nearest UFO for your complimentary brain scan!",
@@ -471,7 +454,7 @@ function HomePage({ t, setCurrentPage, showPopup }) {
         </svg>
         <div className="alien-overlay"></div>
         <div className="hero-content">
-          <div className="ufo" onClick={() => setLang(l => l === 'EN' ? 'RU' : 'EN')}>🛸</div>
+          <div className="ufo" onClick={() => setLang(currentLang => currentLang === 'EN' ? 'RU' : 'EN')}>🛸</div>
           <h1 className="hero-title" data-text={t.heroTitle}>{t.heroTitle}</h1>
           <div className="hero-tagline">Defend Earth or Join the Martian Empire. The choice is yours!</div>
           <p className="hero-subtitle">
@@ -571,7 +554,7 @@ function HomePage({ t, setCurrentPage, showPopup }) {
       <footer id="footer" className="footer">
         <div className="container">
           <p>{t.footer}</p>
-          <button className="lang-switch-btn" aria-label="Switch language" onClick={() => setLang(l => l === 'EN' ? 'RU' : 'EN')}>
+          <button className="lang-switch-btn" aria-label="Switch language" onClick={() => setLang(currentLang => currentLang === 'EN' ? 'RU' : 'EN')}>
             <span className="btn-icon" role="img" aria-label="language">🌐</span>
             {t.lang}
           </button>
@@ -915,14 +898,10 @@ function invadeEarth() {
           </div>
         </section>
         
-        {/* Footer with Language Switcher */}
+        {/* Footer */}
         <footer className="footer">
           <div className="container">
             <p>ACK ACK ACK! • MARS EMPIRE © 2024 • ALL HUMANS RESERVED FOR EXPERIMENTATION</p>
-            <button className="lang-switch-btn" aria-label="Switch language" onClick={() => setLang(l => l === 'EN' ? 'RU' : 'EN')}>
-              <span className="btn-icon" role="img" aria-label="language">🌐</span>
-              {t.lang}
-            </button>
           </div>
         </footer>
       </div>
@@ -1478,14 +1457,10 @@ function InteractiveComponentsPage({ t }) {
           </div>
         </section>
         
-        {/* Footer with Language Switcher */}
+        {/* Footer */}
         <footer className="footer">
           <div className="container">
             <p>ACK ACK ACK! • MARS EMPIRE © 2024 • ALL HUMANS RESERVED FOR EXPERIMENTATION</p>
-            <button className="lang-switch-btn" aria-label="Switch language" onClick={() => setLang(l => l === 'EN' ? 'RU' : 'EN')}>
-              <span className="btn-icon" role="img" aria-label="language">🌐</span>
-              {t.lang}
-            </button>
           </div>
         </footer>
       </div>
