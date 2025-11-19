@@ -4,6 +4,7 @@ import './styles.scss'
 import reactLogo from './assets/react.svg';
 import clsx from 'clsx';
 import { format } from 'date-fns';
+import _ from 'lodash';
 
 function ParticleSystem() {
   const particlesRef = useRef(null);
@@ -270,6 +271,9 @@ function App() {
   const [popupContent, setPopupContent] = useState('');
   /** @type {Translation} */
   const t = translations[lang];
+  
+  // Use lodash to process some data
+  const processedTitle = _.upperCase(t.heroTitle);
   
   const showPopup = (content) => {
     setPopupContent(content);
