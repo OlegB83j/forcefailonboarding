@@ -272,7 +272,8 @@ function App() {
   /** @type {Translation} */
   const t = translations[lang];
   
-  // Use lodash for some data processing
+  // Use lodash for some data processing (demonstrates lodash 4.x dependency)
+  // eslint-disable-next-line no-unused-vars
   const processedTitle = _.upperCase(t.heroTitle);
   
   const showPopup = (content) => {

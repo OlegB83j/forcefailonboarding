@@ -2,25 +2,36 @@
 
 This project is configured to test warmup scripts that check and install dependencies before running a Vite development server in a remote environment.
 
+## ⚠️ IMPORTANT: Use npm ci Only
+
+**This project MUST use `npm ci` instead of `npm install`.**
+
+`npm ci` is required because it:
+- Enforces strict lockfile consistency
+- Validates that package.json and package-lock.json are in sync
+- Provides reproducible builds in CI/CD environments
+- Fails fast if dependencies are out of sync
+
 ## 🎯 Purpose
 
 This setup simulates a real-world scenario where a project is cloned into a remote environment and a warmup script must:
 1. Verify that required dependencies are installed
 2. Detect missing dependencies
-3. Install any missing dependencies
+3. Install any missing dependencies using **npm ci**
 4. Validate that the application is ready to run
 
 ## 🚀 Quick Start
 
 ### Option 1: Normal Setup
 ```bash
-npm install
+# REQUIRED: Use npm ci instead of npm install
+npm ci
 npm run dev
 ```
 
 ### Option 2: Test Warmup Script
 ```bash
-# Run the example warmup script
+# Run the example warmup script (uses npm ci internally)
 ./warmup-example.sh
 
 # Then start dev server
@@ -51,7 +62,7 @@ This project includes several dependencies that **must be present** for the dev 
 # Remove all dependencies
 rm -rf node_modules
 
-# Run warmup script (should install everything)
+# Run warmup script (should install everything using npm ci)
 ./warmup-example.sh
 
 # Verify with dev server
@@ -60,13 +71,13 @@ npm run dev
 
 ### Scenario 2: Missing specific dependencies
 ```bash
-# Ensure base installation
-npm install
+# Ensure base installation using npm ci
+npm ci
 
 # Remove specific dependencies
 rm -rf node_modules/axios node_modules/sass
 
-# Run warmup script (should detect and fix)
+# Run warmup script (should detect and fix using npm ci)
 ./warmup-example.sh
 
 # Verify
@@ -75,11 +86,20 @@ npm run dev
 
 ### Scenario 3: Everything installed
 ```bash
-# Full installation
-npm install
+# Full installation using npm ci
+npm ci
 
 # Run warmup script (should verify and pass)
 ./warmup-example.sh
+```
+
+### Scenario 4: Lockfile Out of Sync
+```bash
+# If package.json and package-lock.json are out of sync
+# npm ci will fail with an error message
+
+# DO NOT use npm install to fix it in production
+# Instead, ensure your lockfile is properly updated in development first
 ```
 
 ## 🌍 Remote Environment Compatibility
@@ -109,17 +129,33 @@ Without proper dependencies installed, `npm run dev` will fail with:
 - **Missing axios/clsx/date-fns**: Module not found errors in JavaScript
 - **Missing vite-plugin-inspect**: Vite config fails to load
 
+## 🚫 Why NOT npm install?
+
+**Always use `npm ci` in this project, NOT `npm install`:**
+
+| Command | Use Case | Behavior |
+|---------|----------|----------|
+| `npm ci` | **Production/CI/CD** ✅ | Installs from lockfile, fails if out of sync, removes node_modules first |
+| `npm install` | Development only ❌ | Modifies lockfile, resolves versions, not reproducible |
+
+**In remote/production environments, `npm ci` ensures:**
+- Exact same dependency versions every time
+- Fast, reliable installations
+- Early detection of lockfile issues
+- No unexpected dependency updates
+
 ## 📚 Documentation
 
 See `WARMUP_TEST_GUIDE.md` for detailed testing instructions and warmup script implementation guide.
 
 ## 🛠️ Available Scripts
 
+- **`npm ci`** - Install dependencies (REQUIRED - use this, not npm install)
 - `npm run dev` - Start development server (port 3000)
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
-- `./warmup-example.sh` - Run example warmup script
+- `./warmup-example.sh` - Run example warmup script (uses npm ci internally)
 
 ## 🎨 Project Features
 
